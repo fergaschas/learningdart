@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:learningdart/firebase_options.dart';
 import 'package:learningdart/services/auth/auth_exceptions.dart';
 import 'package:learningdart/services/auth/auth_provider.dart';
 import 'package:learningdart/services/auth/auth_user.dart';
@@ -19,7 +21,7 @@ class FirebaseAuthProvider implements AuthProvider {
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -91,5 +93,12 @@ class FirebaseAuthProvider implements AuthProvider {
     } catch (_) {
       throw GenericAuthException();
     }
+  }
+
+  @override
+  Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
 }
